@@ -45,18 +45,12 @@ public class NSFWChat {
     
     private final ArrayList<Pattern> filters = new ArrayList<Pattern>();
     
-    private final Matcher frontMatcher;
-    private final Matcher endMatcher;
-    
     public NSFWChat(IChatPartyPlugin plugin) {
         this.plugin = plugin;
         
         filters.add(Pattern.compile("\\b(.\\s)+(.\\b)", Pattern.CASE_INSENSITIVE));
         filters.add(Pattern.compile("\\S{2,}", Pattern.CASE_INSENSITIVE));
         filters.add(Pattern.compile("(\\b\\S\\s|)?\\S{2,}(?=(\\s\\S)\\b)?", Pattern.CASE_INSENSITIVE));
-        
-        frontMatcher = Pattern.compile("^$", Pattern.MULTILINE).matcher("");
-        endMatcher = Pattern.compile("^$", Pattern.MULTILINE).matcher("");
     }
     
     /**
@@ -69,8 +63,6 @@ public class NSFWChat {
         for (String s : strings) {
             bannedWords.add(s.toLowerCase());
         }
-        
-        recreateMatcher();
     }
     
     /**
@@ -94,7 +86,6 @@ public class NSFWChat {
     public boolean addBannedWord(String word) {
         if (bannedWords.add(word)) {
             this.saveBannedWords();
-            recreateMatcher();
             return true;
         }
         
@@ -111,7 +102,6 @@ public class NSFWChat {
     public boolean removeBannedWord(String word) {
         if (bannedWords.remove(word)) {
             this.saveBannedWords();
-            recreateMatcher();
             return true;
         }
        
@@ -201,27 +191,6 @@ public class NSFWChat {
         plugin.getConfig().set("nsfwWordFilter", new ArrayList<String>(bannedWords));
         plugin.saveConfig();
         plugin.reloadConfig();
-    }
-    
-    private void recreateMatcher() {
-        StringBuilder sb = new StringBuilder();
-        
-        for (String s : bannedWords) {
-            if (sb.length() > 0) {
-                sb.append("|");
-            }
-            
-            sb.append(s);
-        }
-        
-        sb.append(")");
-        
-        // For front matcher
-        sb.insert(0, "(");
-        frontMatcher.usePattern(Pattern.compile("^" + sb.toString()));
-        
-        sb.append("$");
-        endMatcher.usePattern(Pattern.compile(sb.toString()));
     }
     
     private boolean checkMatch(String s) {
