@@ -61,7 +61,8 @@ public class NSFWChatTests {
         { "This should trigger the tester.", true },
         { "This should trigger the detest.", true },
         { "Thi-s sh-34 te9sge", false },
-        { "This is a stests", false }
+        { "This is a stests", false },
+        { "This should trigger the T35t.", true }
       });
    }
 
