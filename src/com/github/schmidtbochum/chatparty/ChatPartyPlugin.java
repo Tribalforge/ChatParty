@@ -46,6 +46,7 @@ import uk.co.drnaylor.chatparty.ess.EssentialsHook;
 import uk.co.drnaylor.chatparty.interfaces.IChatPartyPlugin;
 import uk.co.drnaylor.chatparty.nsfw.NSFWChat;
 import uk.co.drnaylor.chatparty.party.PlayerParty;
+import uk.co.drnaylor.chatparty.util.Utilities;
 
 public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
 
@@ -212,7 +213,6 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
                 spyPlayers.add(player);
             }
         }
-        
     }
     
     /**
@@ -245,7 +245,15 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
         u.remove(player.getUniqueId().toString());
         
         getConfig().set("spy", u);
-        spyPlayers.remove(player);
+        if (!spyPlayers.remove(player)) {
+            // Else, slower UUID check
+            for (OfflinePlayer op : spyPlayers) {
+                if (player.getUniqueId().equals(op.getUniqueId())) {
+                    spyPlayers.remove(op);
+                    break;
+                }
+            }
+        }
         
         saveConfig();
     }
@@ -261,7 +269,8 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
     public boolean toggleSpy(Player player) {
         List<String> list = getConfig().getStringList("spy");
         boolean result;
-        if (spyPlayers.contains(player)) {
+
+        if (Utilities.listContainsPlayer(spyPlayers, player)) {
             unregisterSpy(player);
             result = false;
         } else {

@@ -37,6 +37,7 @@ import uk.co.drnaylor.chatparty.enums.MetadataState;
 import uk.co.drnaylor.chatparty.enums.PlayerPartyRank;
 import uk.co.drnaylor.chatparty.enums.PlayerRemoveReason;
 import uk.co.drnaylor.chatparty.exceptions.ChatPartyException;
+import uk.co.drnaylor.chatparty.util.Utilities;
 
 /**
  * Class to represent a player party.
@@ -69,7 +70,7 @@ public final class PlayerParty {
      */
     public static PlayerParty getPlayerParty(OfflinePlayer player) {
         for (PlayerParty party : parties) {
-            if (party.members.containsKey(player)) {
+            if (Utilities.listContainsPlayer(party.members.keySet(), player)) {
                 return party;
             }
         }
@@ -327,8 +328,16 @@ public final class PlayerParty {
     public Set<Player> getOnlinePlayers() {
         Set<Player> p = new HashSet<Player>();
         for (OfflinePlayer op : members.keySet()) {
-            if (op.isOnline()) {
-                p.add(op.getPlayer());
+            OfflinePlayer temp = op;
+            
+            if (op instanceof Player) {
+                if (!op.getPlayer().isValid()) {
+                    temp = plugin.getServer().getOfflinePlayer(op.getPlayer().getUniqueId());
+                }
+            }
+            
+            if (temp.isOnline()) {
+                p.add(temp.getPlayer());
             }
         }
         
@@ -368,7 +377,7 @@ public final class PlayerParty {
      * @param player The @link{Player} to add the party metadata to.
      */
     public void addPlayerMetadata(OfflinePlayer player) {
-        if (player.isOnline() && members.containsKey(player)) {
+        if (player.isOnline() && Utilities.listContainsPlayer(members.keySet(), player)) {
             player.getPlayer().setMetadata(MetadataState.INPARTY.name(), new FixedMetadataValue(plugin, partyName));
         }
     }
@@ -380,7 +389,20 @@ public final class PlayerParty {
      * @return The @link{PlayerPartyRank} of the player, or <code>null</code> if the player is not part of the party.
      */
     public PlayerPartyRank getPlayerRank(OfflinePlayer op) {
-        return members.get(op);
+        PlayerPartyRank rank = members.get(op);
+        if (rank != null) {
+            return rank;
+        }
+        
+        // If we got a null...
+        for (OfflinePlayer pl : members.keySet()) {
+            if (pl.getUniqueId().equals(op.getUniqueId())) {
+                return members.get(pl);
+            }
+        }
+        
+        // We should have the player, but if not, return null.
+        return null;
     }
     
     /**
@@ -391,11 +413,22 @@ public final class PlayerParty {
      * @throws ChatPartyException Thrown if the player is not in the party.
      */
     public void setPlayerRank(OfflinePlayer player, PlayerPartyRank newRank) throws ChatPartyException {
-        if (!members.containsKey(player)) {
+        if (!Utilities.listContainsPlayer(members.keySet(), player)) {
             throw new ChatPartyException(String.format("The player %s is not in this party.", player.getName()));
         }
         
-        members.put(player, newRank);
+        PlayerPartyRank rank = members.put(player, newRank);
+        
+        // If no player was removed, then we need to find the object and remove it.
+        if (rank == null) {
+            for (OfflinePlayer pl : members.keySet()) {
+                if (pl.getUniqueId().equals(player.getUniqueId()) && members.get(player) != newRank) {
+                    // Remove the old object.
+                    members.remove(pl);
+                    break;
+                }
+            }
+        }
     }
     
     /**
@@ -411,7 +444,7 @@ public final class PlayerParty {
             return false;
         }
         
-        if (!members.containsKey(player)) {
+        if (!Utilities.listContainsPlayer(members.keySet(), player)) {
             if (kicker != null) {
                 plugin.sendMessage(kicker, "The player " + player.getName() + " is not in your party.");
             } 
@@ -524,7 +557,7 @@ public final class PlayerParty {
      * @param player The @link{Player} to remove the party metadata from.
      */
     public void removePlayerMetadata(OfflinePlayer player) {
-        if (player.isOnline() && !members.containsKey(player)) {
+        if (player.isOnline() && !Utilities.listContainsPlayer(members.keySet(), player)) {
             List<MetadataValue> data = player.getPlayer().getMetadata(MetadataState.INPARTY.name());
             for (MetadataValue d : data) {
                 if (d.getOwningPlugin() == plugin && d.asString().equals(partyName)) {
