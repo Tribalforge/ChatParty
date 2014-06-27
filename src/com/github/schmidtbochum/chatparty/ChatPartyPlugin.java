@@ -67,15 +67,12 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
         saveConfig();
        
         spyPlayers = new ArrayList<OfflinePlayer>();
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            registerSpy(player);
-        }
-
+        
         adminChat = new AdminChat(this);
         nsfwChat = new NSFWChat(this);
         
         reloadConfig();
+        getSpies();
         
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(this), this);
 
@@ -97,7 +94,7 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public void onDisable() {
-        //saveConfig();
+        saveConfig();
         EssentialsHook.ClearEssentials();
     }
     
@@ -267,20 +264,13 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public boolean toggleSpy(Player player) {
-        List<String> list = getConfig().getStringList("spy");
-        boolean result;
-
         if (Utilities.listContainsPlayer(spyPlayers, player)) {
             unregisterSpy(player);
-            result = false;
+            return false;
         } else {
             registerSpy(player);
-            result = true;
+            return true;
         }
-        
-        getConfig().set("spy", list);
-        saveConfig();
-        return result;
     }
 
     /**
