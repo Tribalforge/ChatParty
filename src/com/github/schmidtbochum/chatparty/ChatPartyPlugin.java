@@ -227,7 +227,8 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
             st.add(player.getUniqueId().toString());
             
             getConfig().set("spy", st);
-            spyPlayers.add(player);
+            
+            spyPlayers.add(getServer().getOfflinePlayer(player.getUniqueId()));
             
             saveConfig();
         }
