@@ -222,7 +222,7 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public void registerSpy(Player player) {
-        if (player.hasPermission("chatparty.nsfw") && !getConfig().getStringList("spy").contains(player.getUniqueId().toString())) {
+        if (player.hasPermission("chatparty.admin") && !getConfig().getStringList("spy").contains(player.getUniqueId().toString())) {
             List<String> st = getConfig().getStringList("spy");
             st.add(player.getUniqueId().toString());
             

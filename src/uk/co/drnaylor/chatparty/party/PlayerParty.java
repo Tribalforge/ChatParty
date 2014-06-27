@@ -181,7 +181,7 @@ public final class PlayerParty {
                 
                 // If they have played before, add them.
                 if (op.hasPlayedBefore()) {
-                    String rank = section.getString(String.format("parties.%s.players.%s", partyName, uuid));
+                    String rank = section.getString(uuid);
                     if (rank.equalsIgnoreCase("leader")) {
                         pllist.put(op, PlayerPartyRank.LEADER);
                     } else {
@@ -220,7 +220,7 @@ public final class PlayerParty {
             
             // Get the UUID list for players against, and save it to the config.
            for (OfflinePlayer op : party.members.keySet()) {
-               plugin.getConfig().set(String.format("parties.%s.players.%s", partyName, op.getUniqueId().toString()), party.members.get(op));
+               plugin.getConfig().set(String.format("parties.%s.players.%s", partyName, op.getUniqueId().toString()), party.members.get(op).name().toLowerCase());
            }
         }
     }
@@ -352,8 +352,11 @@ public final class PlayerParty {
             return false;
         }
         
+        // Get the OfflinePlayer of the current player.
+        OfflinePlayer op = plugin.getServer().getOfflinePlayer(player.getUniqueId());
+        
         // Add them to the party as a member.
-        members.put(player, PlayerPartyRank.MEMBER);
+        members.put(op, PlayerPartyRank.MEMBER);
         addPlayerMetadata(player);
         
         return true;
