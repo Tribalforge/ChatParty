@@ -24,7 +24,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import uk.co.drnaylor.chatparty.enums.MetadataState;
 import uk.co.drnaylor.chatparty.ess.EssentialsHook;
 

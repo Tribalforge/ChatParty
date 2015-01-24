@@ -18,11 +18,13 @@
  You should have received a copy of the GNU General Public License
  along with ChatParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.schmidtbochum.chatparty;
+package uk.co.drnaylor.chatparty.events;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import org.bukkit.ChatColor;
 
 import org.bukkit.entity.Player;

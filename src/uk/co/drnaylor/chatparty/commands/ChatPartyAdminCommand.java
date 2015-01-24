@@ -5,7 +5,7 @@
  */
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.regex.Pattern;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -77,6 +77,7 @@ public class ChatPartyAdminCommand extends BaseCommandExecutor {
     }
 
     private void helpSubcommand(CommandSender cs) {
+        this.sendMessage(cs, "ChatParty v" + plugin.getDescription().getVersion() + " by dualspiral.");
         this.sendMessage(cs, "--- ChatParty Admin commands ---");
         this.sendMessage(cs, "/cpa reload - Reloads the configuration file.");
         this.sendMessage(cs, "/cpa addword <word> - Adds a word to the NSFW list.");

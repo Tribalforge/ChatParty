@@ -1,6 +1,6 @@
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -73,6 +73,7 @@ public class PartyAdminCommand extends BaseCommandExecutor {
     }
 
     private void helpSubcommand(CommandSender cs) {
+        sendMessage(cs, "ChatParty v" + plugin.getDescription().getVersion() + " by dualspiral.");
         sendMessage(cs, "--- ChatParty Admin Commands ---");
         sendMessage(cs, "/pa add <player> <party> - Add online player to party");
         sendMessage(cs, "/pa rm <player> - Remove online player from current party");

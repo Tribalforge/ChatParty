@@ -20,7 +20,7 @@
  */
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

@@ -20,7 +20,7 @@
 
 package uk.co.drnaylor.chatparty.admin;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import org.bukkit.entity.Player;
 
 

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_chatparty" default="compile.module.chatparty">
+  <dirname property="module.chatparty.basedir" file="${ant.file.module_chatparty}"/>
+  
+  <property name="module.jdk.home.chatparty" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.chatparty" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.chatparty" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.chatparty" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="chatparty.output.dir" value="${module.chatparty.basedir}/out/production/ChatParty"/>
+  <property name="chatparty.testoutput.dir" value="${module.chatparty.basedir}/out/test/ChatParty"/>
+  
+  <path id="chatparty.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="chatparty.module.production.classpath">
+    <path refid="${module.jdk.classpath.chatparty}"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.junit_4.classpath"/>
+  </path>
+  
+  <path id="chatparty.runtime.production.module.classpath">
+    <pathelement location="${chatparty.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.junit_4.classpath"/>
+  </path>
+  
+  <path id="chatparty.module.classpath">
+    <path refid="${module.jdk.classpath.chatparty}"/>
+    <pathelement location="${chatparty.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.junit_4.classpath"/>
+  </path>
+  
+  <path id="chatparty.runtime.module.classpath">
+    <pathelement location="${chatparty.testoutput.dir}"/>
+    <pathelement location="${chatparty.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+    <path refid="library.junit_4.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.chatparty">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.chatparty">
+    <patternset refid="excluded.from.module.chatparty"/>
+  </patternset>
+  
+  <path id="chatparty.module.sourcepath">
+    <dirset dir="${module.chatparty.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  <path id="chatparty.module.test.sourcepath">
+    <dirset dir="${module.chatparty.basedir}">
+      <include name="test"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.chatparty" depends="compile.module.chatparty.production,compile.module.chatparty.tests" description="Compile module ChatParty"/>
+  
+  <target name="compile.module.chatparty.production" depends="register.custom.compilers" description="Compile module ChatParty; production classes">
+    <mkdir dir="${chatparty.output.dir}"/>
+    <javac2 destdir="${chatparty.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.chatparty}/javac">
+      <compilerarg line="${compiler.args.chatparty}"/>
+      <bootclasspath refid="chatparty.module.bootclasspath"/>
+      <classpath refid="chatparty.module.production.classpath"/>
+      <src refid="chatparty.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.chatparty"/>
+    </javac2>
+    
+    <copy todir="${chatparty.output.dir}">
+      <fileset dir="${module.chatparty.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.chatparty.tests" depends="register.custom.compilers,compile.module.chatparty.production" description="compile module ChatParty; test classes" unless="skip.tests">
+    <mkdir dir="${chatparty.testoutput.dir}"/>
+    <javac2 destdir="${chatparty.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.chatparty}/javac">
+      <compilerarg line="${compiler.args.chatparty}"/>
+      <bootclasspath refid="chatparty.module.bootclasspath"/>
+      <classpath refid="chatparty.module.classpath"/>
+      <src refid="chatparty.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.chatparty"/>
+    </javac2>
+    
+    <copy todir="${chatparty.testoutput.dir}">
+      <fileset dir="${module.chatparty.basedir}/test">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.chatparty" description="cleanup module">
+    <delete dir="${chatparty.output.dir}"/>
+    <delete dir="${chatparty.testoutput.dir}"/>
+  </target>
+</project>

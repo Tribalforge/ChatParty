@@ -1,6 +1,6 @@
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

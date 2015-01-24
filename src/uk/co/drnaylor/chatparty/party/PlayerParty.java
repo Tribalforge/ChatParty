@@ -19,7 +19,7 @@
  */
 package uk.co.drnaylor.chatparty.party;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

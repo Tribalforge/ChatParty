@@ -18,7 +18,7 @@
  You should have received a copy of the GNU General Public License
  along with ChatParty.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.github.schmidtbochum.chatparty;
+package uk.co.drnaylor.chatparty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,7 @@ import uk.co.drnaylor.chatparty.commands.PartyAdminCommand;
 import uk.co.drnaylor.chatparty.commands.PartyCommand;
 import uk.co.drnaylor.chatparty.enums.MetadataState;
 import uk.co.drnaylor.chatparty.ess.EssentialsHook;
+import uk.co.drnaylor.chatparty.events.PlayerEventHandler;
 import uk.co.drnaylor.chatparty.interfaces.IChatPartyPlugin;
 import uk.co.drnaylor.chatparty.nsfw.NSFWChat;
 import uk.co.drnaylor.chatparty.party.PlayerParty;

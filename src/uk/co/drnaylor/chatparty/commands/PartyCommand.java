@@ -20,7 +20,7 @@
  */
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -120,7 +120,9 @@ public class PartyCommand extends BaseCommandExecutor {
      */
     private void helpSubcommand(Player player) {
 
-        plugin.sendMessage(player, "--- ChatParty Help ---");
+        plugin.sendMessage(player, "ChatParty v" + plugin.getDescription().getVersion() + " by dualspiral.");
+
+        plugin.sendMessage(player, "--- Help ---");
 
         plugin.sendMessage(player, "/chat" + ChatColor.WHITE + ": Toggle the public chat.");
 

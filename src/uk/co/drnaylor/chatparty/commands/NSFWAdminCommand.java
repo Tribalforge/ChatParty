@@ -19,7 +19,7 @@
  */
 package uk.co.drnaylor.chatparty.commands;
 
-import com.github.schmidtbochum.chatparty.ChatPartyPlugin;
+import uk.co.drnaylor.chatparty.ChatPartyPlugin;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;

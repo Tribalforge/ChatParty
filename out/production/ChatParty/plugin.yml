@@ -1,8 +1,8 @@
 name: ChatParty
-main: uk.co.drnaylor.chatparty.ChatPartyPlugin
+main: com.github.schmidtbochum.chatparty.ChatPartyPlugin
 version: 0.5.0-SNAPSHOT
-author: dualspiral
-authors: [schmidtbochum]
+author: schmidtbochum
+authors: [dualspiral, JammyBand]
 softdepend: [Essentials]
 description: >
              Party Chat Plugin
