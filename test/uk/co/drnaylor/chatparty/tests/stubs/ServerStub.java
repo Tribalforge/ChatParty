@@ -490,12 +490,12 @@ public class ServerStub implements Server {
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(File file) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(File file) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(BufferedImage bi) throws IllegalArgumentException, Exception {
+    public CachedServerIcon loadServerIcon(BufferedImage bi) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

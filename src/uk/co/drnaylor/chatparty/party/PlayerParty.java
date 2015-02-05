@@ -487,11 +487,9 @@ public final class PlayerParty {
         }
         
         // Admin
-        if (reason.equals(PlayerRemoveReason.DISBANDED)) {
-            // We don't care as an Admin.
-        } else if (reason.equals(PlayerRemoveReason.KICKED_BY_LEADER)) {
+        if (reason.equals(PlayerRemoveReason.KICKED_BY_LEADER)) {
             plugin.sendSpyPartyMessage(this, String.format(reason.getAdminMessageTemplate(), player.getName(), this.getName(), kicker.getName()));
-        } else {
+        } else if (!reason.equals(PlayerRemoveReason.DISBANDED)) {
             plugin.sendSpyPartyMessage(this, String.format(reason.getAdminMessageTemplate(), player.getName(), this.getName()));
         }
     }

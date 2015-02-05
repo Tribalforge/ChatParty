@@ -20,7 +20,6 @@
 
 package uk.co.drnaylor.chatparty.tests.stubs;
 
-import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;

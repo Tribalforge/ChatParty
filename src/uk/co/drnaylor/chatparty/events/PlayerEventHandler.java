@@ -57,7 +57,7 @@ public class PlayerEventHandler implements Listener {
     /**
      * Fires when a player joins the server.
      *
-     * @param event
+     * @param event The event to handle
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerJoin(PlayerJoinEvent event) {
@@ -140,9 +140,9 @@ public class PlayerEventHandler implements Listener {
     /**
      * Fires an event when the player chats on the server.
      *
-     * @param event
+     * @param event The event to handle
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     void onPlayerChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
 
@@ -154,7 +154,7 @@ public class PlayerEventHandler implements Listener {
                 event.setCancelled(true);
                 return;
             }
-                        
+
             player.removeMetadata(MetadataState.IGNORE.name(), plugin);
         } else if (player.hasMetadata(MetadataState.ADMINCHAT.name())) {
             plugin.getAdminChat().sendAdminMessage(player, event.getMessage());

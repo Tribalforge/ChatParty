@@ -25,16 +25,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public abstract class BaseCommandExecutor implements CommandExecutor {
+abstract class BaseCommandExecutor implements CommandExecutor {
     
-    protected final ChatPartyPlugin plugin;
+    final ChatPartyPlugin plugin;
         
     /**
      * Constructs the object, and provides a reference to the plugin.
      * 
      * @param plugin The plugin.
      */
-    protected BaseCommandExecutor(ChatPartyPlugin plugin) {
+    BaseCommandExecutor(ChatPartyPlugin plugin) {
         this.plugin = plugin;
     }
     
@@ -44,7 +44,7 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
      * @param sender The sender of the command.
      * @return The player, or <code>null</code> if the sender is the console.
      */
-    protected Player getPlayerFromSender(CommandSender sender) {
+    Player getPlayerFromSender(CommandSender sender) {
         if (sender instanceof Player) {
             return (Player) sender;
         } 
@@ -57,7 +57,7 @@ public abstract class BaseCommandExecutor implements CommandExecutor {
      * @param cs The sender of the command.
      * @param message The message to send.
      */
-    protected void sendMessage(CommandSender cs, String message) {
+    void sendMessage(CommandSender cs, String message) {
         Player player = getPlayerFromSender(cs);
         if (player == null) {
             cs.sendMessage(message);
