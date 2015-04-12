@@ -47,13 +47,22 @@ public class NSFWChatTests {
    @Parameterized.Parameters
    public static Collection params() {
       return Arrays.asList(new Object[][] {
-         { "This is a test string", true },
-         { "This is not", false },
-         { "This should trigger the te.s*t.", true },
-         { "This should trigger the Test.", true },
-         { "This should trigger the TeSt.", true },
-         { "Thi-s sh-34 te9sge", false },
-         { "This is a stests", false }
+        { "This is a test string", true },
+        { "This is not", false },
+        { "This should trigger the te.s*t.", true },
+        { "This should trigger the Test.", true },
+        { "This should trigger the TeSt.", true },
+        { "This should trigger the Te_St.", true },
+        { "This should trigger the T eSt.", true },
+        { "This should trigger the TeS t.", true },
+        { "This should trigger the Te St.", false }, 
+        { "This should trigger the T e S t.", true },
+        { "This should trigger the t e s t.", true },
+        { "This should trigger the tester.", true },
+        { "This should trigger the detest.", true },
+        { "Thi-s sh-34 te9sge", false },
+        { "This is a stests", false },
+        { "This should trigger the T35t.", true }
       });
    }
 

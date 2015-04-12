@@ -25,8 +25,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,10 +43,14 @@ public class NSFWChat {
 
     private final HashSet<String> bannedWords = new HashSet<String>();
     
-    private final Pattern wordFilter = Pattern.compile("[a-zA-Z0-9\\,\\._\\-\\?\\!\\*]+", Pattern.CASE_INSENSITIVE);
+    private final ArrayList<Pattern> filters = new ArrayList<Pattern>();
     
     public NSFWChat(IChatPartyPlugin plugin) {
         this.plugin = plugin;
+        
+        filters.add(Pattern.compile("\\b(.\\s)+(.\\b)", Pattern.CASE_INSENSITIVE));
+        filters.add(Pattern.compile("\\S{2,}", Pattern.CASE_INSENSITIVE));
+        filters.add(Pattern.compile("(\\b\\S\\s|)?\\S{2,}(?=(\\s\\S)\\b)?", Pattern.CASE_INSENSITIVE));
     }
     
     /**
@@ -112,17 +116,33 @@ public class NSFWChat {
      */
     public boolean containsBannedWord(String chat) {
         ChatColor.stripColor(chat);
-        Scanner scanner = new Scanner(chat.toLowerCase());
         
-        while(scanner.hasNext(wordFilter)) {
-            String s = scanner.next(wordFilter);
-            s = s.replaceAll("[\\,\\._\\-\\?\\!\\*]", "");
-            if (bannedWords.contains(s)) {
-                // Banned word.
-                return true;
-            } else if (s.endsWith("s") && bannedWords.contains(s.substring(0, s.length() - 1))) {
-                // Pluralised banned word.
-                return true;
+        // Only get the characters we are interested in
+        String chatString = chat.toLowerCase()
+                .replaceAll("[^a-zA-Z01345\\s]", "")
+                .replaceAll("0", "o")
+                .replaceAll("1", "i")
+                .replaceAll("5", "s")
+                .replaceAll("4", "a")
+                .replaceAll("3", "e");
+        for (Pattern p : filters) {
+            boolean lookahead = p.pattern().contains("(?=");
+            
+            Matcher matcher = p.matcher(chatString);
+            while (matcher.find()) {     
+                String grp = matcher.group();
+                
+                // Add lookahead portion.
+                if (lookahead) {
+                    String l = matcher.group(matcher.groupCount());
+                    if (l != null) {
+                        grp += l;
+                    }
+                }
+                
+                if (checkMatch(grp)) {
+                    return true;
+                }
             }
         }
         
@@ -171,5 +191,17 @@ public class NSFWChat {
         plugin.getConfig().set("nsfwWordFilter", new ArrayList<String>(bannedWords));
         plugin.saveConfig();
         plugin.reloadConfig();
+    }
+    
+    private boolean checkMatch(String s) {
+        String matcher = s.replaceAll("\\s", "");
+
+        for (String w : bannedWords) {
+           if (matcher.startsWith(w) || matcher.endsWith(w)) {
+               return true;
+           }
+        }  
+        
+        return false;
     }
 }

@@ -47,6 +47,7 @@ import uk.co.drnaylor.chatparty.events.PlayerEventHandler;
 import uk.co.drnaylor.chatparty.interfaces.IChatPartyPlugin;
 import uk.co.drnaylor.chatparty.nsfw.NSFWChat;
 import uk.co.drnaylor.chatparty.party.PlayerParty;
+import uk.co.drnaylor.chatparty.util.Utilities;
 
 public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
 
@@ -67,15 +68,12 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
         saveConfig();
        
         spyPlayers = new ArrayList<OfflinePlayer>();
-
-        for (Player player : getServer().getOnlinePlayers()) {
-            registerSpy(player);
-        }
-
+        
         adminChat = new AdminChat(this);
         nsfwChat = new NSFWChat(this);
         
         reloadConfig();
+        getSpies();
         
         getServer().getPluginManager().registerEvents(new PlayerEventHandler(this), this);
 
@@ -97,7 +95,7 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public void onDisable() {
-        //saveConfig();
+        saveConfig();
         EssentialsHook.ClearEssentials();
     }
     
@@ -213,7 +211,6 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
                 spyPlayers.add(player);
             }
         }
-        
     }
     
     /**
@@ -223,12 +220,13 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public void registerSpy(Player player) {
-        if (player.hasPermission("chatparty.nsfw") && !getConfig().getStringList("spy").contains(player.getUniqueId().toString())) {
+        if (player.hasPermission("chatparty.admin") && !getConfig().getStringList("spy").contains(player.getUniqueId().toString())) {
             List<String> st = getConfig().getStringList("spy");
             st.add(player.getUniqueId().toString());
             
             getConfig().set("spy", st);
-            spyPlayers.add(player);
+            
+            spyPlayers.add(getServer().getOfflinePlayer(player.getUniqueId()));
             
             saveConfig();
         }
@@ -245,7 +243,15 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
         u.remove(player.getUniqueId().toString());
         
         getConfig().set("spy", u);
-        spyPlayers.remove(player);
+        if (!spyPlayers.remove(player)) {
+            // Else, slower UUID check
+            for (OfflinePlayer op : spyPlayers) {
+                if (player.getUniqueId().equals(op.getUniqueId())) {
+                    spyPlayers.remove(op);
+                    break;
+                }
+            }
+        }
         
         saveConfig();
     }
@@ -259,19 +265,13 @@ public class ChatPartyPlugin extends JavaPlugin implements IChatPartyPlugin {
      */
     @Override
     public boolean toggleSpy(Player player) {
-        List<String> list = getConfig().getStringList("spy");
-        boolean result;
-        if (spyPlayers.contains(player)) {
+        if (Utilities.listContainsPlayer(spyPlayers, player)) {
             unregisterSpy(player);
-            result = false;
+            return false;
         } else {
             registerSpy(player);
-            result = true;
+            return true;
         }
-        
-        getConfig().set("spy", list);
-        saveConfig();
-        return result;
     }
 
     /**
