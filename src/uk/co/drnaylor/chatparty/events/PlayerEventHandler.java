@@ -116,6 +116,8 @@ public class PlayerEventHandler implements Listener {
             plugin.getConfig().set("lastPlayerChannel." + player.getUniqueId().toString(), "admin");
         } else if (player.hasMetadata(MetadataState.NSFWCHAT.name())) {
             plugin.getConfig().set("lastPlayerChannel." + player.getUniqueId().toString(), "nsfw");
+        } else {
+            plugin.getConfig().set("lastPlayerChannel." + player.getUniqueId().toString(), null);
         }
         
         if (player.hasMetadata(MetadataState.INPARTY.name())) {
